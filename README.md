@@ -10,8 +10,8 @@
 
 
 <h2 align="center">ETAPE 2</h2>
-
 <p align="center"><strong>✅ Une fois connecté au compte reddit !</strong><p> 
+  
 <p>[>] Allez sur https://www.reddit.com/prefs/apps</br>[>] Une fois sur la page cliquez sur le bouton <img src="https://i.ibb.co/PttsyWv/Capture-d-cran-du-2021-11-12-21-37-08.png", height="25"></br>[>] Si tout a été fait correctement remplissez les champs que vous verrez comme ceci :</p>
 <p align="center"> <img src="https://i.ibb.co/r5gmHK0/Capture-d-cran-du-2021-11-12-21-40-17.png", width=500, height=200></p>
 <p>[>] Vous aurez quelque chose comme cela j'ai justé inspecté l'élément vous expliquant à quoi correspond chaque élement.</p>
@@ -19,19 +19,32 @@
 <p>[>] Retenez bien cette étape elle sera nécessaire pour celle d'après ne fermez par la page !
   
 
+  
+  
+  
 <h2 align= "center">ETAPE 3</h2>
-<p align="center"><strong>✅ ous allons créer un webhook !</strong><p> 
+<p align="center"><strong>✅ Nous allons créer un webhook !</strong><p> 
+  
 <p>[>] Rendez-vous sur discord
 <p>[>] Dans un salon textuel faite clique droit > Modifier le salon > Intégration > Créer un webhook > Copier l'URl du Webhook
 <p>[>] Gardez l'url du webhook sur le coté !
   
   
+  
+  
+  
+  
 <h2 align="center">ETAPE 4</h2>
 <p align="center"><strong>✅ Une fois l'app crée !</strong><p> 
+  
 <p>[>] Si vous n'avez pas python installez le : https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe</p>
 <p>[>] Ensuite modifier le fichier <strong>"config.py"</strong> et remplacez les valeurs de <strong>"clientid"</strong> par celui de votre app, remplacez <strong>"clientsecret"</strong> par le votre, remplacez <strong>"pseudo"</strong> par le votre et mettez <strong>"mdp"</strong> mettrez le mot de passe du compte que vous avez crée !
 <p> [>] Ensuite lancez le fichier <strong>./start.bat</strong></b>
 <p> [>] Entrez le nombre de commentaire que le bot doit faire par heure</p>
+
+
+
+
 
 <h2 align= "center">En cas de problème rejoignez le discord</h2>
 <p align="center"><strong>✅ Discord : https://discord.gg/SjymgtkNEz</strong><p> 
