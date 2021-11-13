@@ -1,1 +1,1 @@
-python3 ./nftbot.py
+python nftbot.py
