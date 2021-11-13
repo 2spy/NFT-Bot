@@ -1,5 +1,5 @@
 import os
-from config import mdp, webhookurl, metakey, goodmessage, clientid, clientsecret, pseudo #This is config file
+from config import mdp, webhookurl, metakey, goodmessage, clientid, clientsecret, pseudo, userdiscord #This is config file
 try:
     import time, requests, praw, random #pip install requests, praw
 except:
@@ -61,20 +61,25 @@ def bot():
         nbr_giveaway = 200
         
     while True:
-        print("ok")
+        print(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] C'est partit !")
         for submission in subreddit.hot(limit=nbr_giveaway):
             messg = random.choice(goodmessage)
             emj = random.choice(emoj)
             data = {
-                "username" : "NFT Bot"
+                "username" : "NFT Bot",
+                "avatar_url" : "https://cdn.discordapp.com/avatars/755734583005282334/f50603ab57beb11b22be7500742aea6b.png?size=1024"
             }
             data["embeds"] = [
                 {
-                    "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** ``{metakey} - {messg}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                    "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** ``{metakey} - {messg}``\n\n**Nombre de message envoyé :** ``{msg_posted}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
                     "title" : "[>] **Le bot a posté un commentaire !**",
                     "thumbnail" : {
                         "url" : f"{submission.url}"
-                        }}]
+                        },
+                    "footer" : {
+                        "text" : "Merci d'utiliser le bot ! Cela me donne de la force ! Bonne chance."
+                    }}]
+
             sucess = {
                 "username" : "NFT Bot"
             }
@@ -92,28 +97,30 @@ def bot():
             }
             error["embeds"] = [
                 {
-                    "description" : f"**Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !!**\n\n**Nombre de message posté :**  ``{msg_posted}``\n\n```Consultez le PDF afin de savoir ce que vous pouvez faire !```\n\n **Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
-                    "title" : "[>] **Le bot a fini d'envoyer les messages !**",
+                    "description" : f"Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !\n\n**Nombre de message posté :**  ``{msg_posted}``\n\n```Consultez le READ.me afin de savoir ce que vous pouvez faire !```\n\n **Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                    "title" : "[>] **Le bot a rencontré une erreur !**",
                     "thumbnail" : {
                         "url" : f"https://cdn.discordapp.com/avatars/755734583005282334/f50603ab57beb11b22be7500742aea6b.png?size=1024"
                         }}]
 
             msg_posted +=1
             try:
-                submission.reply(f"{emj} Metamask > {metakey}\n{messg}")
+                submission.reply(f"""{emj} Metamask > {metakey} !
+                                 {messg}""")
                 submission.upvote()
                 print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Le bot a posté un commentaire ! \n[{Fore.RED}>{Fore.WHITE}] ID du poste | {submission.id}\n[{Fore.RED}>{Fore.WHITE}] Commentaire | {metakey} - {messg}\n[{Fore.RED}>{Fore.WHITE}] Upvote | True\n[{Fore.RED}>{Fore.WHITE}] Webhook Posté | True")
                 result = requests.post(webhookurl, json = data)
                 System.Title(f"NFT | Bot | Nombre de message > {msg_posted}")
-                time.sleep(random.randint(15,30))
-            except:
-                print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.GREEN}-{Fore.WHITE}] RATE LIMITED ! or check your acmsg_posted if you are banned ?! En cas d'erreur rejoignez le discord !")
+                time.sleep(random.randint(20,40))
+            except Exception as err:
+                print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.GREEN}-{Fore.WHITE}] {err}")
                 error_requests = requests.post(webhookurl, json = error)
                 time.sleep(60*60*60)
-                
-        print(f"{Fore.GREEN} Sucess !")
-        sucessfull = requests.post(webhookurl, json = sucess)
-        time.sleep(60*60*60)
+        break       
+    print(f"{Fore.GREEN} [>] Sucess !\n[>] Le bot reprendra tout à l'heure !")
+    sucessfull = requests.post(webhookurl, json = sucess)
+    time.sleep(10)
+    bot()
             
 #################################################################
 #                                                               #
@@ -126,28 +133,37 @@ System.Title("NFT | Bot | By : 2$.py#6495")
 System.Size(140, 45)
 
 banner = r"""
-                        ╒════╕   
-                        │    │   
-                      └─┬────┬─┘ 
-                        │    ├┐  
-                        │☻ ☻ └│  
-                        │ <  └┘  
-                        │    │   
-                        │└─┘ │   
-                        │    │   
-                        └──┘ │   
-                          │  │   
-                          │  │   
-
-
-██████╗  ██████╗ ████████╗    ███╗   ██╗███████╗████████╗
-██╔══██╗██╔═══██╗╚══██╔══╝    ████╗  ██║██╔════╝╚══██╔══╝
-██████╔╝██║   ██║   ██║       ██╔██╗ ██║█████╗     ██║   
-██╔══██╗██║   ██║   ██║       ██║╚██╗██║██╔══╝     ██║   
-██████╔╝╚██████╔╝   ██║       ██║ ╚████║██║        ██║   
-╚═════╝  ╚═════╝    ╚═╝       ╚═╝  ╚═══╝╚═╝        ╚═╝   
+   ||====================================================================||
+   ||//$\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//$\\||
+   ||(100)==================| FEDERAL RESERVE NOTE |================(100)||
+   ||\\$//        ~         '------========--------'                \\$//||
+   ||<< /        /$\              // ____ \\                         \ >>||
+   ||>>|  12    //L\\            // ///..) \\         L38036133B   12 |<<||
+   ||<<|        \\ //           || <||  >\  ||                        |>>||
+   ||>>|         \$/            ||  $$ --/  ||        One Hundred     |<<||
+||====================================================================||>||
+||//$\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//$\\||<||
+||(100)==================| FEDERAL RESERVE NOTE |================(100)||>||
+||\\$//        ~         '------========--------'                \\$//||\||
+||<< /        /$\              // ____ \\                         \ >>||)||
+||>>|  12    //L\\            // ///..) \\         L38036133B   12 |<<||/||
+||<<|        \\ //           || <||  >\  ||                        |>>||=||
+||>>|         \$/            ||  $$ --/  ||        One Hundred     |<<||
+||<<|      L38036133B        *\\  |\_/  //* series                 |>>||
+||>>|  12                     *\\/___\_//*   1989                  |<<||
+||<<\      Treasurer     ______/Franklin\________     Secretary 12 />>||
+||//$\                 ~|UNITED STATES OF AMERICA|~               /$\\||
+||(100)===================  ONE HUNDRED DOLLARS =================(100)||
+||\\$//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\$//||
+||====================================================================||
+        ██████╗  ██████╗ ████████╗    ███╗   ██╗███████╗████████╗
+        ██╔══██╗██╔═══██╗╚══██╔══╝    ████╗  ██║██╔════╝╚══██╔══╝
+        ██████╔╝██║   ██║   ██║       ██╔██╗ ██║█████╗     ██║   
+        ██╔══██╗██║   ██║   ██║       ██║╚██╗██║██╔══╝     ██║   
+        ██████╔╝╚██████╔╝   ██║       ██║ ╚████║██║        ██║   
+        ╚═════╝  ╚═════╝    ╚═╝       ╚═╝  ╚═══╝╚═╝        ╚═╝   
                                                          
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.red_to_white, Colorate.Vertical, enter=True)
+Anime.Fade(Center.Center(banner), Colors.green_to_white, Colorate.Vertical, enter=True)
 bot()
