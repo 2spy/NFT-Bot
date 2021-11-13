@@ -37,7 +37,7 @@
 <h2 align="center">ETAPE 4</h2>
 <p align="center"><strong>✅ Une fois l'app crée !</strong><p> 
   
-<p>[>] Si vous n'avez pas python installez le : https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe</p>
+<p>[>] Si vous n'avez pas python installez le : https://www.python.org/ftp/python/3.8.4/python-3.8.4.exe</p>
 <p>[>] Ensuite modifier le fichier <strong>"config.py"</strong> et remplacez les valeurs de <strong>"clientid"</strong> par celui de votre app, remplacez <strong>"clientsecret"</strong> par le votre, remplacez <strong>"pseudo"</strong> par le votre et mettez <strong>"mdp"</strong> mettrez le mot de passe du compte que vous avez crée !
 <p> [>] Ensuite lancez le fichier <strong>./start.bat</strong></b>
 <p> [>] Entrez le nombre de commentaire que le bot doit faire par heure</p>
