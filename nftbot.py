@@ -73,7 +73,7 @@ def bot():
                     "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** ``{metakey} - {messg}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
                     "title" : "[>] **Le bot a posté un commentaire !**",
                     "thumbnail" : {
-                        "url" : f"https://i.ibb.co/r6rhKS0/hack.png"
+                        "url" : f"{submission.url}"
                         }}]
             sucess = {
                 "username" : "NFT Bot"
@@ -149,5 +149,5 @@ banner = r"""
                                                          
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.red_to_white, Colorate.Vertical, enter=True) # Thanks to Billythegoat356
+Anime.Fade(Center.Center(banner), Colors.red_to_white, Colorate.Vertical, enter=True)
 bot()
