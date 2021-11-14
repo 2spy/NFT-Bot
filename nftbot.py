@@ -1,5 +1,5 @@
 import os
-from config import mdp, webhookurl, metakey, goodmessage, clientid, clientsecret, pseudo, userdiscord #This is config file
+from config import mdp, webhookurl, metakey, goodmessage, clientid, clientsecret, pseudo #This is config file
 try:
     import time, requests, praw, random #pip install requests, praw
 except:
