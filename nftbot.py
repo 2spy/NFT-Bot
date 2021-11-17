@@ -32,7 +32,7 @@ def input_cat(subreddit, nbr_giveaway):
     '''
     condition = True
     while condition:
-        catego = str(input(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Dans quel catégorie voulez-vous que le bot consulte les messages >>> "))
+        catego = str(input(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Dans quel catégorie voulez-vous que le bot consulte les messages  (hot / new) >>> "))
         subcatego = ""
         if catego.lower() == "new":
             subcatego = subreddit.new(limit=nbr_giveaway)
