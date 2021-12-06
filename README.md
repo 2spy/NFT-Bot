@@ -47,5 +47,5 @@
 
 
 <h2 align= "center">En cas de problème rejoignez le discord</h2>
-<p align="center"><strong>✅ Discord : https://discord.gg/SjymgtkNEz</strong><p> 
+<p align="center"><strong>✅ Discord : https://dsc.gg/spyy</strong><p> 
 
