@@ -1,5 +1,5 @@
 <h1 align="center"><strong>NFT - Bot</strong></h1>
-<p align="center"> <img src="https://cdn.discordapp.com/avatars/755734583005282334/f50603ab57beb11b22be7500742aea6b.png?size=1024", width="500", height="500"></p>
+<p align="center"> <img src="https://media4.giphy.com/media/ho0xXatV7b3Fo1ZRXN/giphy.gif", width="500", height="500"></p>
 <p align="center">🎨 NFT - Bot 🎨</p>
 
 <h2 align="center">ETAPE 1</h2>
