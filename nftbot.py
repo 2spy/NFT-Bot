@@ -70,10 +70,10 @@ class RedditBot:
             
     
     def run(self):
-        err = "None"
         erreur = False
         start = True    
         while start == True:
+            print(Spy.vert)
             with alive_bar(self.__nbr_message ,title = "Reddit Bot",  bar='classic', spinner='twirls') as bar:
                 for submission in self.__catego:
                     data = {
@@ -82,7 +82,7 @@ class RedditBot:
                         }
                     data["embeds"] = [
                     {
-                        "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** ``{config['metakey']} - {random.choice(config['phrase'])}\n\n**Catégorie :** ``{self.__subcatego}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                        "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** {config['metakey']} - {random.choice(config['phrase'])}\n\n**Catégorie :**``{self.__subcatego}``\n\n**Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
                         "title" : "[✅] **NOUVEAU POSTE !**",
                         "thumbnail" : {
                             "url" : f"{submission.url}"
@@ -96,24 +96,11 @@ class RedditBot:
                     }
                     sucess["embeds"] = [
                     {
-                        "description" : f"**Allez consulter votre compte opensea il se peut que des NFT vous sont envoyés !!**\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                        "description" : f"**Allez consulter votre compte opensea il se peut que des NFT vous sont envoyés !!**\n\n**Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
                         "title" : "[✅] **PROGRAMME TERMINE !**",
                         "thumbnail" : {
                             "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
-                            }}]
-
-
-                    error = {
-                    "username" : "NFT Bot"
-                    }
-                    error["embeds"] = [
-                    {   
-                        "description" : f"Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !\n\n```{err}```\n\n **Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
-                        "title" : "[❌] **ERREUR !**",
-                        "thumbnail" : {
-                            "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
-                            }}]
-                    
+                            }}]                    
 
                         
                     with open('post_list.txt', 'r') as postlist:
@@ -129,18 +116,29 @@ class RedditBot:
                             with open("post_list.txt", 'a+') as fichier:
                                 fichier.write(f"{submission}\n")
                             bar()
-                            time.sleep(random.randint(10,15))
-                        except:
+                            time.sleep(random.randint(20,40))
+                        except Exception as err:
+                            error = {
+                            "username" : "NFT Bot"
+                            }
+                            error["embeds"] = [
+                            {   
+                            "description" : f"Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !\n\n```{err}```\n\n **Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
+                            "title" : "[❌] **ERREUR !**",
+                            "thumbnail" : {
+                                "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
+                            }}]
+                            err = err
                             requests.post(config['webhook'], json = error)
                             erreur = True
                             print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Une erreur est survenue ! Le bot s'est arrété !")
                             start = False
                             break
-                        
+
                 if erreur == False:
                     requests.post(config['webhook'], json = sucess)
                 else:
-                    input("Fermer le programme vous-mêmes !")
+                    input(f"{Spy.rouge} >>>> Appuyez sur entrer pour fermer le programme !")
                             
                                                                  
         
