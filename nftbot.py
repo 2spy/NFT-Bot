@@ -47,7 +47,7 @@ try:
                         username = config["pseudo"],
                         password= config["motdepasse"])
 except:
-    print(f"{Spy.blanc}[{Spy.RED}+{Spy.blanc}] Les informations du compte sont invalides !")
+    print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Les informations du compte sont invalides !")
 
 
 #################################################################
