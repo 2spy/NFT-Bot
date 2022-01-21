@@ -60,7 +60,8 @@ except:
 class RedditBot:
     def __init__(self, subcatego = "NFTsMarketPlace", nbr_message = 200, catego = "hot"):
         self.__subcatego = subcatego
-        self.__nbr_message = nbr_message
+        self.__nbr_message = int(input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Combien de message voulez-vous envoyer ? "))
+        catego = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Dans quel catégorie voulez-vous ? (hot/new) ")
         if catego == "hot":
             self.__catego = reddit.subreddit(subcatego).hot(limit = nbr_message)
         if catego == "new":
@@ -134,6 +135,8 @@ class RedditBot:
                             erreur = True
                             print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Une erreur est survenue ! Le bot s'est arrété !")
                             start = False
+                            break
+                        
                 if erreur == False:
                     requests.post(config['webhook'], json = sucess)
                 else:
