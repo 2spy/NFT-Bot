@@ -1,215 +1,148 @@
 import os
-from config import mdp, webhookurl, metakey, goodmessage, clientid, clientsecret, pseudo #This is config file
+import json
 try:
     import time, requests, praw, random #pip install requests, praw
 except:
     os.system("pip install requests")
     os.system("pip install praw")
-    os.system("cls")
+try:
+    from alive_progress import alive_bar
+except:
+    os.system("pip install alive_progress")
 try:
     from pystyle import Add, Center, Anime, Colors, Colorate, Write, System #pip install pystyle
 except:
     os.system("pip install pystyle")
-    os.system("cls")
-try:
-    from colorama import init, Fore #pip install colorama
-except:
-    os.system("pip install colorama")
-    os.system("cls")
     
-init()
-reddit = praw.Reddit(client_id = clientid,
-                     client_secret = clientsecret,
-                     user_agent = "<console:HAPPY:1.0>",
-                     username = pseudo,
-                     password= mdp) 
-def input_cat(subreddit, nbr_giveaway):
-    '''
-    Entrer [>] rien -> Sortie [>] str(choix de l'utilisateur)
-    [>] Demande la catégorie de l'utilisateur
-    [>] Si catégorie invalide -> boucle
-    [>] Si condition réunis alors on retourne le choix
-    '''
-    condition = True
-    while condition:
-        catego = str(input(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Dans quel catégorie voulez-vous que le bot consulte les messages  (hot / new) >>> "))
-        subcatego = ""
-        if catego.lower() == "new":
-            subcatego = subreddit.new(limit=nbr_giveaway)
-            condition = False
-            return subcatego, catego.lower()
-        if catego.lower() == "hot":
-            subcatego = subreddit.hot(limit=nbr_giveaway)
-            condition = False
-            return subcatego, catego.lower()
-        print(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Choix introuvable reformulez la catégorie voulue !")
+os.system("cls")
+
+with open("config.json", 'r') as confg:
+    config = json.load(confg)
+
+class Spy:
+    gris = "\033[1;30;1m"
+    rouge = "\033[1;31;1m"
+    vert = "\033[1;32;1m"
+    jaune = "\033[1;33;1m"
+    bleu = "\033[1;34;1m"
+    violet = "\033[1;35;1m"
+    cyan = "\033[1;36;1m"
+    blanc = "\033[2;0;1m"
+    
+editconfig = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Voulez-vous modifier la config ? (y/n)")
+if editconfig == "y" or editconfig == "Y" or editconfig == "yes" or editconfig == "YES":
+    with open("config.json", "w+") as confg:
+        config["pseudo"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Pseudo du compte reddit :" )
+        config["motdepasse"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Mot de passe du compte reddit : ")
+        config["clientid"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Client ID de l'application : ")
+        config["clientsecret"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Client Secret de l'application : ")
+        config["webhook"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Lien du webhook : ")
+        config["metakey"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Votre clé métamask : ")
+        json.dump(config,confg,indent=4)
+
+try:
+    reddit = praw.Reddit(client_id = config["clientid"],
+                        client_secret = config["clientsecret"],
+                        user_agent = "<console:HAPPY:1.0>",
+                        username = config["pseudo"],
+                        password= config["motdepasse"])
+except:
+    print(f"{Spy.blanc}[{Spy.RED}+{Spy.blanc}] Les informations du compte sont invalides !")
 
 
-       
-def stop():
-    '''
-    Entrer [>] rien -> Sortie [>] rien
-    [>] Attends que l'utilisateur lise le message d'erreur
-    [>] Puis qu'il appuie sur entrer !
-    [>] Fin du programme !
-    '''
-    input(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Appuyez sur entrer pour fermer le programme !")
 #################################################################
 #                                                               #
 #                                                               #
 #                         BOT REDDIT                            #
-#           DISCORD :    https://discord.gg/3JWKnxydHz          #
+#           DISCORD :    https://dsc.gg/spyy                    #
 #################################################################        
-
-def bot():
-    '''
-    Entrer [>] rien -> Sortie [>] rien
-    [>] Envoie des commentaires remplissant les conditions du giveaway automatiquement !
-    [>] Si il y a une erreur envoie une requête sur le webhook + print l'erreur
-    [>] En cas de problème tout est formulé sur le PDF
-    
-    #Ceci est une version 1 du bot !
-    #Merci de laisser le lien du discord pour me soutenir gratuitement :)
-    #J'espère que vous gagnerez des NFT ou autre selon le subreddit
-    #Une version Twitter et instagram arrive dans quelque semaine !
-    #N'hésitez pas à partager le bot !
-    '''
-    
-    
-    System.Title("NFT | Bot | By : 2$.py#6495")
-    emoj = ["🤞","🙏","❤️","💯","▶️","🔔","🆔","💸"] 
-    
-    
-    try:
-        commentd = reddit.comment("t3_qsj32h")
-        commentd.upvote()
-        commentd.reply(f"{metakey}")
-    except Exception as err:
-        if str(err) == f"received 403 HTTP response":
-            print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.RED}-{Fore.WHITE}] Compte bannis de Reddit !")
-        if str(err) == f"received 401 HTTP response":
-            print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.RED}-{Fore.WHITE}] Les informations du compte ne sont pas valides vérifier les !")
-        time.sleep(2)
-        stop()
-        return
-    
-    
-    print(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Merci de votre contribution ! Bonne chance !")
-    subreddit = reddit.subreddit("NFTsMarketplace")
-    msg_posted = 0  
-    
-    nbr_giveaway = int(input(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Nombre de giveaway sur lesquels vous voulez participer (conseillé : 200) :  "))
-    if nbr_giveaway == "":
-        nbr_giveaway = 200
-    
-    subcatego = input_cat(subreddit, nbr_giveaway) 
-
-             
-
-
         
-    while True:
-        print(f"{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] C'est partit !")
-        for submission in subcatego[0]:
-            messg = random.choice(goodmessage)
-            emj = random.choice(emoj)
-            err = ""
-            data = {
-                "username" : "NFT Bot",
-                "avatar_url" : "https://cdn.discordapp.com/avatars/755734583005282334/f50603ab57beb11b22be7500742aea6b.png?size=1024"
-                }
-            data["embeds"] = [
-            {
-                "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** ``{metakey} - {messg}``\n\n**Nombre de message envoyé :** ``{msg_posted}``\n\n**Catégorie :** ``{subcatego[1]}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
-                "title" : "[>] **Le bot a posté un commentaire !**",
-                "thumbnail" : {
-                    "url" : f"{submission.url}"
-                    },
-                "footer" : {
-                    "text" : "Merci d'utiliser le bot ! Cela me donne de la force ! Bonne chance."
-                }}]
+class RedditBot:
+    def __init__(self, subcatego = "NFTsMarketPlace", nbr_message = 200, catego = "hot"):
+        self.__subcatego = subcatego
+        self.__nbr_message = nbr_message
+        if catego == "hot":
+            self.__catego = reddit.subreddit(subcatego).hot(limit = nbr_message)
+        if catego == "new":
+            self.__catego = reddit.subreddit(subcatego).new(limit = nbr_message)
 
-            sucess = {
-            "username" : "NFT Bot"
-            }
-            sucess["embeds"] = [
-            {
-                "description" : f"**Allez consulter votre compte opensea il se peut que des NFT vous sont envoyés !!**\n\n**Nombre de message posté :**  ``{msg_posted}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
-                "title" : "[>] **Le bot a fini d'envoyer les messages !**",
-                "thumbnail" : {
-                    "url" : f"https://cdn.discordapp.com/avatars/755734583005282334/f50603ab57beb11b22be7500742aea6b.png?size=1024"
-                    }}]
-
-
-            error = {
-            "username" : "NFT Bot"
-            }
-            error["embeds"] = [
-            {
-                "description" : f"Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !\n\n**Nombre de message posté :**  ``{msg_posted}``\n\n```{err}```\n\n **Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
-                "title" : "[>] **Le bot a rencontré une erreur !**",
-                "thumbnail" : {
-                    "url" : f"https://cdn.discordapp.com/avatars/755734583005282334/f50603ab57beb11b22be7500742aea6b.png?size=1024"
-                    }}]
-
-
-            msg_posted +=1
             
-            try:
-                with open("post_list.txt","r") as f:
-                    postid = f.readline()
-                if submission.id in postid:
-                    print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.GREEN}-{Fore.WHITE}] Le bot a déjà posté un commentaire sous se poste !")
-                    time.sleep(5)
-                else:
-                    with open("post_list.txt","a+") as f:
-                        f.write(submission.id+"\n")
-                    submission.reply(f"""{emj} Metamask > {metakey} !
-                                    {messg}""")
-                    submission.upvote()
-                    print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] Le bot a posté un commentaire ! \n[{Fore.RED}>{Fore.WHITE}] ID du poste | {submission.id}\n[{Fore.RED}>{Fore.WHITE}] Commentaire | {metakey} - {messg}\n[{Fore.RED}>{Fore.WHITE}] Upvote | True\n[{Fore.RED}>{Fore.WHITE}] Webhook Posté | True")
-                    result = requests.post(webhookurl, json = data)
-                    System.Title(f"NFT | Bot | Nombre de message > {msg_posted}")
-                    time.sleep(random.randint(20,40))
-            
-            except Exception as err:
-                if str(err) == f"received 403 HTTP response":
-                    print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.RED}-{Fore.WHITE}] Compte bannis de Reddit !")
-                    err = "Compte bannis de reddit !"
-                    error_requests = requests.post(webhookurl, json = error)
-                    stop()
-                    return
+    
+    def run(self):
+        err = "None"
+        erreur = False
+        start = True    
+        while start == True:
+            with alive_bar(self.__nbr_message ,title = "Reddit Bot",  bar='classic', spinner='twirls') as bar:
+                for submission in self.__catego:
+                    data = {
+                        "username" : "NFT Bot",
+                        "avatar_url" : "https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
+                        }
+                    data["embeds"] = [
+                    {
+                        "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** ``{config['metakey']} - {random.choice(config['phrase'])}\n\n**Catégorie :** ``{self.__subcatego}``\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                        "title" : "[✅] **NOUVEAU POSTE !**",
+                        "thumbnail" : {
+                            "url" : f"{submission.url}"
+                            },
+                        "footer" : {
+                            "text" : "Merci d'utiliser le bot ! Cela me donne de la force ! Bonne chance."
+                        }}]
+
+                    sucess = {
+                    "username" : "NFT Bot"
+                    }
+                    sucess["embeds"] = [
+                    {
+                        "description" : f"**Allez consulter votre compte opensea il se peut que des NFT vous sont envoyés !!**\n\n**Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                        "title" : "[✅] **PROGRAMME TERMINE !**",
+                        "thumbnail" : {
+                            "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
+                            }}]
+
+
+                    error = {
+                    "username" : "NFT Bot"
+                    }
+                    error["embeds"] = [
+                    {   
+                        "description" : f"Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !\n\n```{err}```\n\n **Support :** [Join discord](https://discord.gg/3JWKnxydHz)",
+                        "title" : "[❌] **ERREUR !**",
+                        "thumbnail" : {
+                            "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
+                            }}]
                     
-                if str(err) == f"received 401 HTTP response":
-                    print(f"{Fore.RED}---------------------------------\n{Fore.WHITE}[{Fore.RED}-{Fore.WHITE}] Les informations du compte ne sont pas valides vérifier les !")
-                    err = "Les informations du compte ne sont pas valides vérifier les !"
-                    error_requests = requests.post(webhookurl, json = error)
-                    stop()
-                    return
-        break       
-    
-    
-    
-    print(f"{Fore.GREEN} [>] Sucess !\n[>] Le bot reprendra tout à l'heure !")
-    sucessfull = requests.post(webhookurl, json = sucess)
-    
-    
-    time.sleep(60*60)
-    bot()
-        
-        
-        
-        
-        
-            
-#################################################################
-#                                                               #
-#                                                               #
-#                            MAIN                               #
-#                                                               #
-#                                                               #
-#################################################################        
 
+                        
+                    with open('post_list.txt', 'r') as postlist:
+                        allpost = postlist.readline()
+                    if submission in allpost.split():
+                        bar()
+                        time.sleep(5)
+                    else:
+                        try:
+                            submission.upvote()
+                            submission.reply(f"My Metamask Key > {config['metakey']} ! {random.choice(config['phrase'])}")
+                            requests.post(config['webhook'], json = data)
+                            with open("post_list.txt", 'a+') as fichier:
+                                fichier.write(f"{submission}\n")
+                            bar()
+                            time.sleep(random.randint(10,15))
+                        except:
+                            requests.post(config['webhook'], json = error)
+                            erreur = True
+                            print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Une erreur est survenue ! Le bot s'est arrété !")
+                            start = False
+                if erreur = False:
+                    requests.post(config['webhook'], json = sucess)
+                else:
+                    input("Fermer le programme vous-mêmes !")
+                            
+                                                                 
+        
+        
+    
 
 
 System.Clear()
@@ -224,7 +157,7 @@ banner = r"""
             +-----------------------+  |      ,"        ,"    |
             |  .-----------------.  |  |     +---------+      |
             |  |                 |  |  |     | -==----'|      |
-            |  |  I LOVE NFT!    |  |  |     |         |      |
+            |  |  NFT Bot V2!    |  |  |     |         |      |
             |  |  Bad command or |  |  |/----|`---=    |      |
             |  |  C:\>_          |  |  |   ,/|==== ooo |      ;
             |  |                 |  |  |  // |(((( [33]|    ,"
@@ -237,14 +170,19 @@ banner = r"""
      /_==__==========__==_ooo__ooo=_/'   /___________,"
      `-----------------------------'
 
-        ██████╗  ██████╗ ████████╗    ███╗   ██╗███████╗████████╗
-        ██╔══██╗██╔═══██╗╚══██╔══╝    ████╗  ██║██╔════╝╚══██╔══╝
-        ██████╔╝██║   ██║   ██║       ██╔██╗ ██║█████╗     ██║   
-        ██╔══██╗██║   ██║   ██║       ██║╚██╗██║██╔══╝     ██║   
-        ██████╔╝╚██████╔╝   ██║       ██║ ╚████║██║        ██║   
-        ╚═════╝  ╚═════╝    ╚═╝       ╚═╝  ╚═══╝╚═╝        ╚═╝   
+███▄▄▄▄      ▄████████     ███          ▀█████████▄   ▄██████▄      ███     
+███▀▀▀██▄   ███    ███ ▀█████████▄        ███    ███ ███    ███ ▀█████████▄ 
+███   ███   ███    █▀     ▀███▀▀██        ███    ███ ███    ███    ▀███▀▀██ 
+███   ███  ▄███▄▄▄         ███   ▀       ▄███▄▄▄██▀  ███    ███     ███   ▀ 
+███   ███ ▀▀███▀▀▀         ███          ▀▀███▀▀▀██▄  ███    ███     ███     
+███   ███   ███            ███            ███    ██▄ ███    ███     ███     
+███   ███   ███            ███            ███    ███ ███    ███     ███     
+ ▀█   █▀    ███           ▄████▀        ▄█████████▀   ▀██████▀     ▄████▀   
+                                                                                
+
+ 
                                                          
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.yellow_to_red, Colorate.Vertical, enter=True)
-bot()
+Anime.Fade(Center.Center(banner), Colors.white_to_red  , Colorate.Vertical, enter=True)
+RedditBot().run()
