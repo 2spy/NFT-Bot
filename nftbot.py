@@ -134,7 +134,7 @@ class RedditBot:
                             erreur = True
                             print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Une erreur est survenue ! Le bot s'est arrété !")
                             start = False
-                if erreur = False:
+                if erreur == False:
                     requests.post(config['webhook'], json = sucess)
                 else:
                     input("Fermer le programme vous-mêmes !")
