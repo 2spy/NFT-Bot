@@ -107,7 +107,7 @@ class RedditBot:
                         allpost = postlist.readline()
                     if submission in allpost.split():
                         bar()
-                        time.sleep(5)
+                        time.sleep(10)
                     else:
                         try:
                             submission.upvote()
@@ -116,7 +116,7 @@ class RedditBot:
                             with open("post_list.txt", 'a+') as fichier:
                                 fichier.write(f"{submission}\n")
                             bar()
-                            time.sleep(random.randint(20,40))
+                            time.sleep(random.randint(30,50))
                         except Exception as err:
                             error = {
                             "username" : "NFT Bot"
