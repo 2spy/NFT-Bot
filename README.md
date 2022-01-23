@@ -6,7 +6,7 @@
 
 
 <h1 align="center"> Tutorial Here </h1>
-<p align="center"><strong>https://www.youtube.com/watch?v=h6fOErvWIGI</p>
+<p align="center"><strong>https://youtu.be/CC-evNkW1RY</p>
 
 
 <h2 align= "center">Support</h2>
