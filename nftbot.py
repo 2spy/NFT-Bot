@@ -14,7 +14,10 @@ try:
 except:
     os.system("pip install pystyle")
     
-os.system("cls")
+try:
+    os.system("cls")
+except:
+    os.system("clear")
 
 with open("config.json", 'r') as confg:
     config = json.load(confg)
@@ -32,22 +35,20 @@ class Spy:
 editconfig = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Voulez-vous modifier la config ? (y/n)")
 if editconfig == "y" or editconfig == "Y" or editconfig == "yes" or editconfig == "YES":
     with open("config.json", "w+") as confg:
-        config["pseudo"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Pseudo du compte reddit :" )
-        config["motdepasse"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Mot de passe du compte reddit : ")
+        config["pseudo"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Pseudo du compte reddit : ")
+        config["motdepasse"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Mot de passe du compte reddit :{Spy.gris} ")
         config["clientid"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Client ID de l'application : ")
         config["clientsecret"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Client Secret de l'application : ")
         config["webhook"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Lien du webhook : ")
         config["metakey"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Votre clé métamask : ")
+        config["spykey"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Votre clé $py : ")
         json.dump(config,confg,indent=4)
 
-try:
-    reddit = praw.Reddit(client_id = config["clientid"],
-                        client_secret = config["clientsecret"],
-                        user_agent = "<console:HAPPY:1.0>",
-                        username = config["pseudo"],
-                        password= config["motdepasse"])
-except:
-    print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Les informations du compte sont invalides !")
+reddit = praw.Reddit(client_id = config["clientid"],
+                    client_secret = config["clientsecret"],
+                    user_agent = "<console:HAPPY:1.0>",
+                    username = config["pseudo"],
+                    password= config["motdepasse"])
 
 
 #################################################################
@@ -70,12 +71,23 @@ class RedditBot:
             
     
     def run(self):
+        try:
+            for submission in reddit.subreddit("all").hot(limit=1):
+                sumbission.upvote()
+        except:
+            print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Les informations du compte sont invalides !")
+            input("")
+            return
         erreur = False
-        start = True    
-        while start == True:
-            print(Spy.vert)
+        start = True
+        message = 0
+        while start == True or message != self.__nbr_message:
+            print(Spy.jaune)
             with alive_bar(self.__nbr_message ,title = "Reddit Bot",  bar='classic', spinner='twirls') as bar:
                 for submission in self.__catego:
+                    if message == self.__nbr_message:
+                        start = False
+                        break
                     data = {
                         "username" : "NFT Bot",
                         "avatar_url" : "https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
@@ -106,8 +118,9 @@ class RedditBot:
                     with open('post_list.txt', 'r') as postlist:
                         allpost = postlist.readline()
                     if submission in allpost.split():
+                        message += 1
                         bar()
-                        time.sleep(10)
+                        time.sleep(5+ random.randint(0,5))
                     else:
                         try:
                             submission.upvote()
@@ -115,8 +128,9 @@ class RedditBot:
                             requests.post(config['webhook'], json = data)
                             with open("post_list.txt", 'a+') as fichier:
                                 fichier.write(f"{submission}\n")
+                            message += 1
                             bar()
-                            time.sleep(random.randint(30,50))
+                            time.sleep(random.randint(15,30))
                         except Exception as err:
                             error = {
                             "username" : "NFT Bot"
@@ -135,20 +149,20 @@ class RedditBot:
                             start = False
                             break
 
-                if erreur == False:
-                    requests.post(config['webhook'], json = sucess)
-                else:
-                    input(f"{Spy.rouge} >>>> Appuyez sur entrer pour fermer le programme !")
+            if erreur == False:
+                requests.post(config['webhook'], json = sucess)
+            else:
+                input(f"{Spy.rouge} >>>> Appuyez sur entrer pour fermer le programme !")
                             
                                                                  
         
         
     
 
-
-System.Clear()
-System.Title("NFT | Bot | By : 2$.py#6495")
-System.Size(140, 45)
+try:
+    os.system("cls")
+except:
+    os.system("clear")
 
 banner = r"""	
 
@@ -185,5 +199,5 @@ banner = r"""
                                                          
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.white_to_red  , Colorate.Vertical, enter=True)
+Anime.Fade(Center.Center(banner), Colors.white_to_green  , Colorate.Vertical, enter=True)
 RedditBot().run()
