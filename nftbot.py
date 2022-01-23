@@ -73,10 +73,10 @@ class RedditBot:
     def run(self):
         try:
             for submission in reddit.subreddit("all").hot(limit=1):
-                sumbmission.upvote()
+                submission.upvote()
         except:
             print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Les informations du compte sont invalides !")
-            input("")
+            input("...")
             return
         erreur = False
         start = True
