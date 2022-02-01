@@ -1,7 +1,8 @@
-import os
 import json
+import os
+
 try:
-    import time, requests, praw, random #pip install requests, praw
+    import time, requests, praw, random  # pip install requests, praw
 except:
     os.system("pip install requests")
     os.system("pip install praw")
@@ -10,10 +11,10 @@ try:
 except:
     os.system("pip install alive_progress")
 try:
-    from pystyle import Add, Center, Anime, Colors, Colorate, Write, System #pip install pystyle
+    from pystyle import Add, Center, Anime, Colors, Colorate, Write, System  # pip install pystyle
 except:
     os.system("pip install pystyle")
-    
+
 try:
     os.system("cls")
 except:
@@ -21,6 +22,7 @@ except:
 
 with open("config.json", 'r') as confg:
     config = json.load(confg)
+
 
 class Spy:
     gris = "\033[1;30;1m"
@@ -31,24 +33,7 @@ class Spy:
     violet = "\033[1;35;1m"
     cyan = "\033[1;36;1m"
     blanc = "\033[2;0;1m"
-    
-editconfig = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Voulez-vous modifier la config ? (y/n)")
-if editconfig == "y" or editconfig == "Y" or editconfig == "yes" or editconfig == "YES":
-    with open("config.json", "w+") as confg:
-        config["pseudo"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Pseudo du compte reddit : ")
-        config["motdepasse"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Mot de passe du compte reddit :{Spy.gris} ")
-        config["clientid"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Client ID de l'application : ")
-        config["clientsecret"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Client Secret de l'application : ")
-        config["webhook"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Lien du webhook : ")
-        config["metakey"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Votre clé métamask : ")
-        config["spykey"] = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Votre clé $py : ")
-        json.dump(config,confg,indent=4)
 
-reddit = praw.Reddit(client_id = config["clientid"],
-                    client_secret = config["clientsecret"],
-                    user_agent = "<console:HAPPY:1.0>",
-                    username = config["pseudo"],
-                    password= config["motdepasse"])
 
 
 #################################################################
@@ -56,108 +41,147 @@ reddit = praw.Reddit(client_id = config["clientid"],
 #                                                               #
 #                         BOT REDDIT                            #
 #           DISCORD :    https://dsc.gg/spyy                    #
-#################################################################        
-        
-class RedditBot:
-    def __init__(self, subcatego = "NFTsMarketPlace", nbr_message = 200, catego = "hot"):
-        self.__subcatego = subcatego
-        self.__nbr_message = int(input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Combien de message voulez-vous envoyer ? "))
-        catego = input(f"{Spy.blanc}[{Spy.vert}+{Spy.blanc}] Dans quel catégorie voulez-vous ? (hot/new) ")
-        if catego == "hot":
-            self.__catego = reddit.subreddit(subcatego).hot(limit = nbr_message)
-        if catego == "new":
-            self.__catego = reddit.subreddit(subcatego).new(limit = nbr_message)
+#################################################################
 
-            
-    
+
+class RedditBot:
+    def __init__(self, subcatego="NFTsMarketPlace", nbr_message=1000):
+        self.__cooldown = 10
+        self.__subcatego = subcatego
+        self.__nbr_message = int(
+            input(f"{Spy.violet}[{Spy.vert}+{Spy.violet}] Combien de message voulez-vous envoyer ? "))
+
+        with open("config.json", 'r') as confg:
+            config = json.load(confg)
+        global reddit
+
+        reddit = praw.Reddit(client_id=config["clientid"],
+                             client_secret=config["clientsecret"],
+                             user_agent="<console:HAPPY:1.0>",
+                             username=config["pseudo"],
+                             password=config["motdepasse"])
+
+        category = input(f"{Spy.violet}[{Spy.vert}+{Spy.violet}] Dans quel catégorie voulez-vous ? (hot/new) ")
+        if category == "hot":
+            self.__category = reddit.subreddit(subcatego).hot(limit=nbr_message)
+        if category == "new":
+            self.__category = reddit.subreddit(subcatego).new(limit=nbr_message)
+
     def run(self):
+        reddit1 = praw.Reddit(client_id=config["clientid"],
+                              client_secret=config["clientsecret"],
+                              user_agent="<console:HAPPY:1.0>",
+                              username=config["pseudo"],
+                              password=config["motdepasse"])
+
+
         try:
             for submission in reddit.subreddit("all").hot(limit=1):
                 submission.upvote()
         except:
-            print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Les informations du compte sont invalides !")
+            print(f"{Spy.violet}[{Spy.rouge}+{Spy.violet}] Les informations du compte sont invalides !")
             input("...")
             return
-        erreur = False
+        error = False
         start = True
         message = 0
-        while start == True or message != self.__nbr_message:
-            print(Spy.jaune)
-            with alive_bar(self.__nbr_message ,title = "Reddit Bot",  bar='classic', spinner='twirls') as bar:
-                for submission in self.__catego:
+        while start or (message != self.__nbr_message):
+            with alive_bar(self.__nbr_message, title=f"Reddit Bot {self.__confignumber}", bar='classic',
+                           spinner='waves') as bar:
+
+                for submission in self.__category:
                     if message == self.__nbr_message:
                         start = False
                         break
-                    data = {
-                        "username" : "NFT Bot",
-                        "avatar_url" : "https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
-                        }
-                    data["embeds"] = [
-                    {
-                        "description" : f"**Lien du post :** {submission.url}\n\n**Nom du post :** ``{submission.title}``\n\n**ID du post :** ``{submission.id}``\n\n**Commentaire :** {config['metakey']} - {random.choice(config['phrase'])}\n\n**Catégorie :**``{self.__subcatego}``\n\n**Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
-                        "title" : "[✅] **NOUVEAU POSTE !**",
-                        "thumbnail" : {
-                            "url" : f"{submission.url}"
-                            },
-                        "footer" : {
-                            "text" : "Merci d'utiliser le bot ! Cela me donne de la force ! Bonne chance."
-                        }}]
+                    data = {"username": "NFT Bot",
+                            "avatar_url": "https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4"
+                                          "/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg",
+                            "embeds": [{
+                                "description": f"**Lien du post :** {submission.url}\n\n"
+                                               f"**Nom du post :** ``{submission.title}``"
+                                               f"\n\n**ID du post :** ``{submission.id}``"
+                                               f"\n\n**Commentaire :** {config['metakey']} - "
+                                               f"{random.choice(config['phrase'])}\n\n"
+                                               f"**Catégorie :**``{self.__subcatego}``\n\n"
+                                               f"**Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
 
-                    sucess = {
-                    "username" : "NFT Bot"
-                    }
-                    sucess["embeds"] = [
-                    {
-                        "description" : f"**Allez consulter votre compte opensea il se peut que des NFT vous sont envoyés !!**\n\n**Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
-                        "title" : "[✅] **PROGRAMME TERMINE !**",
-                        "thumbnail" : {
-                            "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
-                            }}]                    
+                                "title": "[✅] **NOUVEAU POSTE !**", "thumbnail": {"url": f"{submission.url}"},
+                                "footer": {
+                                    "text": "Merci d'utiliser le bot ! Cela me donne de la force ! Bonne chance."}}]}
 
-                        
-                    with open('post_list.txt', 'r') as postlist:
-                        allpost = postlist.readline()
+                    success = {"username": "NFT Bot", "embeds": [
+                        {
+                            "description": f"**Allez consulter votre compte opensea il se peut que des NFT vous sont "
+                                           f"envoyés !!**\n\n**Support :** [Join discord]("
+                                           f"https://discord.com/invite/9pVk32cgCG)",
+                            "title": "[✅] **PROGRAMME TERMINE !**",
+                            "thumbnail": {
+                                "url": f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4"
+                                       f"/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg "
+                            }}]}
+
+                    with open('post_list.txt', 'r') as populist:
+                        allpost = populist.readline()
+
                     if submission in allpost.split():
                         message += 1
                         bar()
-                        time.sleep(5+ random.randint(0,5))
+                        time.sleep(5)
+
                     else:
                         try:
                             submission.upvote()
-                            submission.reply(f"My Metamask Key > {config['metakey']} ! {random.choice(config['phrase'])}")
-                            requests.post(config['webhook'], json = data)
-                            with open("post_list.txt", 'a+') as fichier:
-                                fichier.write(f"{submission}\n")
+                            submission.reply(
+                                f"My Metamask Key > {config['metakey']} !"
+                                f" {random.choice(config['phrase'])}")
+                            requests.post(config['webhook'], json=data)
+                            with open("post_list.txt", 'a+') as fishier:
+                                fishier.write(f"{submission}\n")
                             message += 1
                             bar()
-                            time.sleep(random.randint(15,30))
+                            time.sleep(random.randint(20,40))
                         except Exception as err:
-                            error = {
-                            "username" : "NFT Bot"
-                            }
-                            error["embeds"] = [
-                            {   
-                            "description" : f"Allez consulter votre compte reddit il se peut que vous êtes rate limited ou que vôtre compte soit bannis de reddit ou du subreddit !\n\n```{err}```\n\n **Support :** [Join discord](https://discord.com/invite/9pVk32cgCG)",
-                            "title" : "[❌] **ERREUR !**",
-                            "thumbnail" : {
-                                "url" : f"https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg"
-                            }}]
-                            err = err
-                            requests.post(config['webhook'], json = error)
-                            erreur = True
-                            print(f"{Spy.blanc}[{Spy.rouge}+{Spy.blanc}] Une erreur est survenue ! Le bot s'est arrété !")
-                            start = False
-                            break
+                            with bar.pause():
+                                    error = {"username": "NFT Bot", "embeds": [
+                                        {
+                                            "description": f"Allez consulter votre compte reddit il se peut que "
+                                                           f"vous êtes rate limited ou que vôtre compte soit "
+                                                           f"bannis de reddit ou du subreddit !\n\n```"
+                                                           f"{err}```\n\n **Support :** [Join discord]("
+                                                           f"https://discord.com/invite/9pVk32cgCG)",
+                                            "title": "[❌] **ERREUR !**",
+                                            "thumbnail": {
+                                                "url": f"https://cdn.futura-sciences.com/buildsv6/images"
+                                                       f"/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape"
+                                                       f"-yatch-club-2344.jpg "
+                                            }}]}
+                                    err = err
+                                    requests.post(config['webhook'], json=error)
+                                    error = True
 
-            if erreur == False:
-                requests.post(config['webhook'], json = sucess)
+                                    os.system("clear")
+
+                                    print(Spy.violet)
+                                    cooldown = self.__cooldown
+                                    self.__cooldown *= 10
+                                    with alive_bar(cooldown, title="Cooldown - RateLimit", bar='classic',
+                                                   spinner="waves", stats=True, elapsed=False,
+                                                   monitor=False) as bar2:
+                                        while cooldown > 0:
+                                            time.sleep(1)
+                                            cooldown -= 1
+                                            bar2()
+
+
+                                    os.system("clear")
+
+                                    print(self.__confignumber)
+                                    self.run()
+            if not error:
+                requests.post(config['webhook'], json=success)
             else:
                 input(f"{Spy.rouge} >>>> Appuyez sur entrer pour fermer le programme !")
-                            
-                                                                 
-        
-        
-    
+
 
 try:
     os.system("cls")
@@ -172,7 +196,7 @@ banner = r"""
             +-----------------------+  |      ,"        ,"    |
             |  .-----------------.  |  |     +---------+      |
             |  |                 |  |  |     | -==----'|      |
-            |  |  NFT Bot V2!    |  |  |     |         |      |
+            |  |  NFT Bot V3!    |  |  |     |         |      |
             |  |  Bad command or |  |  |/----|`---=    |      |
             |  |  C:\>_          |  |  |   ,/|==== ooo |      ;
             |  |                 |  |  |  // |(((( [33]|    ,"
@@ -199,5 +223,5 @@ banner = r"""
                                                          
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.white_to_green  , Colorate.Vertical, enter=True)
+Anime.Fade(Center.Center(banner), Colors.white_to_green, Colorate.Vertical, enter=True)
 RedditBot().run()
