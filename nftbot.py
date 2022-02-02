@@ -35,6 +35,11 @@ class Spy:
     blanc = "\033[2;0;1m"
 
 
+reddit = praw.Reddit(client_id=config["clientid"],
+                     client_secret=config["clientsecret"],
+                     user_agent="<console:HAPPY:1.0>",
+                     username=config["pseudo"],
+                     password=config["motdepasse"])
 
 #################################################################
 #                                                               #
@@ -51,15 +56,6 @@ class RedditBot:
         self.__nbr_message = int(
             input(f"{Spy.violet}[{Spy.vert}+{Spy.violet}] Combien de message voulez-vous envoyer ? "))
 
-        with open("config.json", 'r') as confg:
-            config = json.load(confg)
-        global reddit
-
-        reddit = praw.Reddit(client_id=config["clientid"],
-                             client_secret=config["clientsecret"],
-                             user_agent="<console:HAPPY:1.0>",
-                             username=config["pseudo"],
-                             password=config["motdepasse"])
 
         category = input(f"{Spy.violet}[{Spy.vert}+{Spy.violet}] Dans quel catégorie voulez-vous ? (hot/new) ")
         if category == "hot":
@@ -68,11 +64,9 @@ class RedditBot:
             self.__category = reddit.subreddit(subcatego).new(limit=nbr_message)
 
     def run(self):
-        reddit1 = praw.Reddit(client_id=config["clientid"],
-                              client_secret=config["clientsecret"],
-                              user_agent="<console:HAPPY:1.0>",
-                              username=config["pseudo"],
-                              password=config["motdepasse"])
+        with open("config.json", 'r') as confg:
+            config = json.load(confg)
+
 
 
         try:
@@ -86,7 +80,7 @@ class RedditBot:
         start = True
         message = 0
         while start or (message != self.__nbr_message):
-            with alive_bar(self.__nbr_message, title=f"Reddit Bot {self.__confignumber}", bar='classic',
+            with alive_bar(self.__nbr_message, title=f"Reddit Bot", bar='classic',
                            spinner='waves') as bar:
 
                 for submission in self.__category:
@@ -196,7 +190,7 @@ banner = r"""
             +-----------------------+  |      ,"        ,"    |
             |  .-----------------.  |  |     +---------+      |
             |  |                 |  |  |     | -==----'|      |
-            |  |  NFT Bot V3!    |  |  |     |         |      |
+            |  |  NFT Bot V2!    |  |  |     |         |      |
             |  |  Bad command or |  |  |/----|`---=    |      |
             |  |  C:\>_          |  |  |   ,/|==== ooo |      ;
             |  |                 |  |  |  // |(((( [33]|    ,"
