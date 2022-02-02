@@ -27,7 +27,7 @@ def gfg():
             config = json.load(confg)
         with open('config.json', 'w+') as confg:
             config["pseudo"] = pseudo
-            config["mdp"] = mdp
+            config["motdepasse"] = mdp
             config["clientid"] = clientid
             config['clientsecret'] = clientsecret
             config['webhook'] = webhook
