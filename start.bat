@@ -1,1 +1,1 @@
-python app.py
+python nftbot.py
