@@ -1,6 +1,9 @@
 import json
 import os
-
+try:
+    import fade
+except:
+    os.system("pip install fade")
 try:
     import time, requests, praw, random  # pip install requests, praw
 except:
@@ -10,10 +13,6 @@ try:
     from alive_progress import alive_bar
 except:
     os.system("pip install alive_progress")
-try:
-    from pystyle import Add, Center, Anime, Colors, Colorate, Write, System  # pip install pystyle
-except:
-    os.system("pip install pystyle")
 
 try:
     os.system("cls")
@@ -54,10 +53,10 @@ class RedditBot:
         self.__cooldown = 10
         self.__subcatego = subcatego
         self.__nbr_message = int(
-            input(f"{Spy.violet}[{Spy.vert}+{Spy.violet}] Combien de message voulez-vous envoyer ? "))
+            input(f"    {Spy.bleu}$ {Spy.blanc}System > {Spy.bleu}How many messages do you want to send ? "))
 
 
-        category = input(f"{Spy.violet}[{Spy.vert}+{Spy.violet}] Dans quel catégorie voulez-vous ? (hot/new) ")
+        category = input(f"    {Spy.bleu}$ {Spy.blanc}System > {Spy.bleu}In which category do you want ? (hot/new) ")
         if category == "hot":
             self.__category = reddit.subreddit(subcatego).hot(limit=nbr_message)
         if category == "new":
@@ -73,14 +72,13 @@ class RedditBot:
             for submission in reddit.subreddit("all").hot(limit=1):
                 submission.upvote()
         except:
-            print(f"{Spy.violet}[{Spy.rouge}+{Spy.violet}] Les informations du compte sont invalides !")
-            input("...")
+            input(f"    {Spy.bleu}$ {Spy.blanc}System > {Spy.bleu}Account information is invalid !")
             return
         error = False
         start = True
         message = 0
         while start or (message != self.__nbr_message):
-            with alive_bar(self.__nbr_message, title=f"Reddit Bot", bar='classic',
+            with alive_bar(self.__nbr_message, title=f"    {Spy.bleu}$ {Spy.blanc}System > Reddit Bot", bar='classic',
                            spinner='waves') as bar:
 
                 for submission in self.__category:
@@ -153,8 +151,7 @@ class RedditBot:
                                     requests.post(config['webhook'], json=error)
                                     error = True
 
-                                    os.system("clear")
-
+                                    os.system("cls")
                                     print(Spy.violet)
                                     cooldown = self.__cooldown
                                     self.__cooldown *= 10
@@ -167,14 +164,14 @@ class RedditBot:
                                             bar2()
 
 
-                                    os.system("clear")
+                                    os.system("cls")
 
                                     print(self.__confignumber)
                                     self.run()
             if not error:
                 requests.post(config['webhook'], json=success)
             else:
-                input(f"{Spy.rouge} >>>> Appuyez sur entrer pour fermer le programme !")
+                input(f"    {Spy.bleu}$ {Spy.blanc}System > Appuyez sur entrer pour fermer le programme !")
 
 
 try:
@@ -182,40 +179,36 @@ try:
 except:
     os.system("clear")
 
-banner = r"""	
-
-                    ,----------------,              ,---------,
-               ,-----------------------,          ,"        ,"|
-             ,"                      ,"|        ,"        ,"  |
-            +-----------------------+  |      ,"        ,"    |
-            |  .-----------------.  |  |     +---------+      |
-            |  |                 |  |  |     | -==----'|      |
-            |  |  NFT Bot V2!    |  |  |     |         |      |
-            |  |  Bad command or |  |  |/----|`---=    |      |
-            |  |  C:\>_          |  |  |   ,/|==== ooo |      ;
-            |  |                 |  |  |  // |(((( [33]|    ,"
-            |  `-----------------'  |," .;'| |((((     |  ,"
-            +-----------------------+  ;;  | |         |,"
-                /_)______________(_/  //'   | +---------+
-        ___________________________/___  `,
-       /  oooooooooooooooo  .o.  oooo /,   \,"-----------
-      / ==ooooooooooooooo==.o.  ooo= //   ,`\--{)B     ,"
-     /_==__==========__==_ooo__ooo=_/'   /___________,"
-     `-----------------------------'
-
-███▄▄▄▄      ▄████████     ███          ▀█████████▄   ▄██████▄      ███     
-███▀▀▀██▄   ███    ███ ▀█████████▄        ███    ███ ███    ███ ▀█████████▄ 
-███   ███   ███    █▀     ▀███▀▀██        ███    ███ ███    ███    ▀███▀▀██ 
-███   ███  ▄███▄▄▄         ███   ▀       ▄███▄▄▄██▀  ███    ███     ███   ▀ 
-███   ███ ▀▀███▀▀▀         ███          ▀▀███▀▀▀██▄  ███    ███     ███     
-███   ███   ███            ███            ███    ██▄ ███    ███     ███     
-███   ███   ███            ███            ███    ███ ███    ███     ███     
- ▀█   █▀    ███           ▄████▀        ▄█████████▀   ▀██████▀     ▄████▀   
-                                                                                
-
- 
-                                                         
-"""[1:]
-
-Anime.Fade(Center.Center(banner), Colors.white_to_green, Colorate.Vertical, enter=True)
+fadedtext = r"""
+                         ______
+                        /     /\
+                       /     /##\
+                      /     /####\
+                     /     /######\
+                    /     /########\
+                   /     /##########\
+                  /     /#####/\#####\
+                 /     /#####/++\#####\
+                /     /#####/++++\#####\
+               /     /#####/\+++++\#####\
+              /     /#####/  \+++++\#####\
+             /     /#####/    \+++++\#####\
+            /     /#####/      \+++++\#####\
+                    ███████╗██████╗ ██╗   ██╗
+                    ██╔════╝██╔══██╗╚██╗ ██╔╝
+                    ███████╗██████╔╝ ╚████╔╝ 
+                    ╚════██║██╔═══╝   ╚██╔╝  
+                    ███████║██║        ██║   
+                    ╚══════╝╚═╝        ╚═╝   
+       /     /#####/        \+++++\#####\
+      /     /#####/__________\+++++\#####\
+     /                        \+++++\#####\
+    /__________________________\+++++\####/
+    \+++++++++++++++++++++++++++++++++\##/
+     \+++++++++++++++++++++++++++++++++\/
+      ``````````````````````````````````
+"""
+faded = fade.blackwhite(fadedtext)
+print(fadedtext)
+print(f"    {Spy.bleu}${Spy.blanc} System : {Spy.bleu}Welcome in NFT Bot :) !")
 RedditBot().run()
